@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Dingo\Api\Exception\UpdateResourceFailedException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Prettus\Validator\Exceptions\ValidatorException;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 
 class UsersController extends Controller
@@ -22,7 +25,7 @@ class UsersController extends Controller
         $user=User::findOrFail($id);
 
         if(Gate::denies('update',$user)){
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
         try{
             $user=$request->performUpdate($user);
